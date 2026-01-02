@@ -18,8 +18,13 @@ export function SessionProvider({ children }) {
   useEffect(() => {
     if (user) localStorage.setItem('user', JSON.stringify(user));
     else localStorage.removeItem('user');
-    if (token) localStorage.setItem('token', token);
-    else localStorage.removeItem('token');
+    if (token) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('access_token', token);
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
+    }
   }, [user, token]);
 
   const login = async (loginData) => {
@@ -73,6 +78,8 @@ export function SessionProvider({ children }) {
   const logout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
   };
 
   // Helper for authenticated requests
